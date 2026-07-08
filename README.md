@@ -24,4 +24,6 @@ Although there are many more functions to cover, those are the ones I can use ri
   High -> ~3.3V -> 1
   Low -> ~0V -> 0
 
+## Building my first program - Password Lock
+
 
