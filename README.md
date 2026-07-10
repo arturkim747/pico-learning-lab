@@ -26,4 +26,66 @@ Although there are many more functions to cover, those are the ones I can use ri
 
 ## Building my first program - Password Lock
 
+It is time to apply everything I have learned so far.
+
+#include <stdio.h>
+#include <string.h>
+#include "pico/stdlib.h" // including a header file for Pico
+
+
+int main(){
+
+    stdio_init_all(); // setting up standart input and output
+    sleep_ms(3000); // waiting for the USB serial connection, else certain messages are lost
+    const int led_pin = 25;
+
+    gpio_init(led_pin); // initializing the pin 25
+    gpio_set_dir(led_pin, GPIO_OUT); // setting it as an output
+
+    printf("***PASSWORD-LOCKER READY***\n");
+
+    while (1){
+        char password[] = "arturkim747";
+        char passkey[30];
+
+        for (int i = 1; i <= 3; i++){
+            printf("Attempt %d out of 3\n", i); 
+            printf("Enter password: ");
+
+            scanf("%s", passkey);
+
+            if (strcmp(passkey, password) == 0){
+                printf("Access Granted!\n");
+                for (int i = 0; i < 5; i++){
+                    gpio_put(led_pin, 1); // setting it high
+                    sleep_ms(1000);
+                    gpio_put(led_pin, 0); // setting it low
+                    sleep_ms(1000);
+                }
+                return 1;
+            }
+            else continue;
+    }
+        printf("You are out of attempts!\n");
+        printf("Please wait for 10 seconds to try again\n");
+        for (int i = 10; i > 0; i--){
+                printf("%d seconds left\n", i);
+                sleep_ms(1000); 
+    }
+
+}
+
+}
+
+
+# Problems encountered & solutions.
+
+-  At the time of writing the code, I did not know that we must write the function gpio_init_all() to enable the use of input/output functions, and yet the most important role of this function - enabling USB Serial. Consequently, I could not even access my Pico serial USB port. A good way to prevent this is to add it right at the very beginning of a function.
+
+- Another problem I countered is that I could not see any input/output in the terminal window. However, later I learned that, for this purpose, we must use the Serial Monitor. Serial Monitor is simply a program that lets us exchange text with a microcontroller.
+
+- As we are reading the source code, we may see that I let my Pico sleep for 2 seconds before executing the main code block. Because as I was running the code, I faced that first 2 input messages were missing. I did that on purpose not to lose first input messages which is a big issue of microcontrollers. Microcontollers read a code in fractions of a seconds, while for my Computer it may take a bit longer to set up the USB connection. As a result, the first message appearing as ""***PASSWORD-LOCKER READY***\n" literally gets lost.
+
+
+
 
